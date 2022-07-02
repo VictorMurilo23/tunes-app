@@ -10,6 +10,7 @@ class Album extends React.Component {
     this.state = {
       arrayDeMusicas: [],
       pegouTudo: false,
+      carregando: false,
     };
   }
 
@@ -27,8 +28,16 @@ class Album extends React.Component {
     });
   }
 
+  colocaLoadingAoSalvarMusica = (e) => {
+    this.setState({ carregando: true, [e.target.name]: true });
+  }
+
+  tiraLoadingAoTerminarDeSalvarMusica = () => {
+    this.setState({ carregando: false });
+  }
+
   render() {
-    const { arrayDeMusicas, pegouTudo } = this.state;
+    const { arrayDeMusicas, pegouTudo, carregando } = this.state;
     if (pegouTudo === false) {
       return <Loading />;
     }
@@ -45,15 +54,22 @@ class Album extends React.Component {
             : null
         }
         {
-
-          arrayDeMusicas.slice(1).map((musica) => (
-            <div key={ musica.trackId }>
-              <MusicCard
-                previewUrl={ musica.previewUrl }
-                trackName={ musica.trackName }
-              />
-            </div>
-          ))
+          carregando ? <Loading />
+            : arrayDeMusicas.slice(1).map((musica) => {
+              const { [musica.trackName]: valor } = this.state;
+              return (
+                <div key={ musica.trackId }>
+                  <MusicCard
+                    value={ valor }
+                    colocaLoading={ this.colocaLoadingAoSalvarMusica }
+                    tiraLoading={ this.tiraLoadingAoTerminarDeSalvarMusica }
+                    objetoInteiro={ musica }
+                    previewUrl={ musica.previewUrl }
+                    trackName={ musica.trackName }
+                    trackId={ musica.trackId }
+                  />
+                </div>);
+            })
         }
       </div>
     );
