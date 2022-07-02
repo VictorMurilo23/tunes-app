@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
 import MusicCard from './MusicCard';
 import Loading from './Loading';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
   constructor() {
@@ -21,10 +22,12 @@ class Album extends React.Component {
   pegaMusicas = async () => {
     const { match } = this.props;
     const { id } = match.params;
+    const favoritas = await getFavoriteSongs();
     const musicas = await getMusics(id);
     this.setState({
       arrayDeMusicas: musicas,
       pegouTudo: true,
+      musicasFavoritas: favoritas,
     });
   }
 
@@ -37,8 +40,8 @@ class Album extends React.Component {
   }
 
   render() {
-    const { arrayDeMusicas, pegouTudo, carregando } = this.state;
-    if (pegouTudo === false) {
+    const { arrayDeMusicas, pegouTudo, carregando, musicasFavoritas } = this.state;
+    if (pegouTudo === false || carregando) {
       return <Loading />;
     }
     return (
@@ -54,22 +57,23 @@ class Album extends React.Component {
             : null
         }
         {
-          carregando ? <Loading />
-            : arrayDeMusicas.slice(1).map((musica) => {
-              const { [musica.trackName]: valor } = this.state;
-              return (
-                <div key={ musica.trackId }>
-                  <MusicCard
-                    value={ valor }
-                    colocaLoading={ this.colocaLoadingAoSalvarMusica }
-                    tiraLoading={ this.tiraLoadingAoTerminarDeSalvarMusica }
-                    objetoInteiro={ musica }
-                    previewUrl={ musica.previewUrl }
-                    trackName={ musica.trackName }
-                    trackId={ musica.trackId }
-                  />
-                </div>);
-            })
+          arrayDeMusicas.slice(1).map((musica) => {
+            const verificaSeTem = musicasFavoritas
+              .some((nome) => nome.trackName === musica.trackName);
+            const { [musica.trackName]: valor } = this.state;
+            return (
+              <div key={ musica.trackId }>
+                <MusicCard
+                  value={ verificaSeTem ? true : valor }
+                  colocaLoading={ this.colocaLoadingAoSalvarMusica }
+                  tiraLoading={ this.tiraLoadingAoTerminarDeSalvarMusica }
+                  objetoInteiro={ musica }
+                  previewUrl={ musica.previewUrl }
+                  trackName={ musica.trackName }
+                  trackId={ musica.trackId }
+                />
+              </div>);
+          })
         }
       </div>
     );
