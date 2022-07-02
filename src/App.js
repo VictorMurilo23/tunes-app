@@ -13,10 +13,14 @@ class App extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/album/:id">
-          <Header />
-          <Album />
-        </Route>
+        <Route
+          path="/album/:id"
+          render={ (props) => (
+            <>
+              <Header />
+              <Album { ...props } />
+            </>) }
+        />
         <Route path="/profile/edit">
           <Header />
           <ProfileEdit />
