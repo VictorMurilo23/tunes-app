@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
   salvarMusica = async (e) => {
     const { colocaLoading, tiraLoading, objetoInteiro } = this.props;
     colocaLoading(e);
-    await addSong(objetoInteiro);
+    if (e.target.checked !== true) {
+      await removeSong(objetoInteiro);
+    } else {
+      await addSong(objetoInteiro);
+    }
     tiraLoading();
   }
 

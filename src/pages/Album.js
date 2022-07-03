@@ -12,27 +12,36 @@ class Album extends React.Component {
       arrayDeMusicas: [],
       pegouTudo: false,
       carregando: false,
+      musicasFavoritas: [],
     };
   }
 
   componentDidMount() {
     this.pegaMusicas();
+    this.pegaFavoritos();
+  }
+
+  componentDidUpdate() {
+    this.pegaFavoritos();
   }
 
   pegaMusicas = async () => {
     const { match } = this.props;
     const { id } = match.params;
-    const favoritas = await getFavoriteSongs();
     const musicas = await getMusics(id);
     this.setState({
       arrayDeMusicas: musicas,
       pegouTudo: true,
-      musicasFavoritas: favoritas,
     });
   }
 
+  pegaFavoritos = async () => {
+    const favoritas = await getFavoriteSongs();
+    this.setState({ musicasFavoritas: favoritas });
+  }
+
   colocaLoadingAoSalvarMusica = (e) => {
-    this.setState({ carregando: true, [e.target.name]: true });
+    this.setState({ carregando: true, [e.target.name]: e.target.checked });
   }
 
   tiraLoadingAoTerminarDeSalvarMusica = () => {
