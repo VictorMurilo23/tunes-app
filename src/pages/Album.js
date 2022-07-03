@@ -25,6 +25,11 @@ class Album extends React.Component {
     this.pegaFavoritos();
   }
 
+  componentWillUnmount() {
+    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
+    this.setState = () => {};
+  }
+
   pegaMusicas = async () => {
     const { match } = this.props;
     const { id } = match.params;
