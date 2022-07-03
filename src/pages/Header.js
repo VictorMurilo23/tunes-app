@@ -7,8 +7,8 @@ class Header extends React.Component {
   constructor() {
     super();
     this.state = {
-      carregando: false,
-      nomeUsuario: '',
+      carregando: true,
+      infoUsuario: {},
     };
   }
 
@@ -17,13 +17,12 @@ class Header extends React.Component {
   }
 
   pegaNomeUsuario = async () => {
-    this.setState({ carregando: true });
     const informacoesUsuario = await getUser();
-    this.setState({ nomeUsuario: informacoesUsuario.name, carregando: false });
+    this.setState({ infoUsuario: informacoesUsuario, carregando: false });
   }
 
   render() {
-    const { carregando, nomeUsuario } = this.state;
+    const { carregando, infoUsuario } = this.state;
     if (carregando) {
       return (<Loading />);
     }
@@ -37,7 +36,7 @@ class Header extends React.Component {
         <p data-testid="header-user-name">
           Olá,
           {' '}
-          {nomeUsuario}
+          <span>{infoUsuario.name}</span>
         </p>
       </header>
     );
