@@ -21,10 +21,14 @@ class App extends React.Component {
               <Album { ...props } />
             </>) }
         />
-        <Route path="/profile/edit">
-          <Header />
-          <ProfileEdit />
-        </Route>
+        <Route
+          path="/profile/edit"
+          render={ (props) => (
+            <>
+              <Header />
+              <ProfileEdit { ...props } />
+            </>) }
+        />
         <Route path="/profile">
           <Header />
           <Profile />

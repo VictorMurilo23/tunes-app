@@ -16,6 +16,15 @@ class Header extends React.Component {
     this.pegaNomeUsuario();
   }
 
+  componentDidUpdate() {
+    this.pegaNomeUsuario();
+  }
+
+  componentWillUnmount() {
+    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
+    this.setState = () => {};
+  }
+
   pegaNomeUsuario = async () => {
     const informacoesUsuario = await getUser();
     this.setState({ infoUsuario: informacoesUsuario, carregando: false });
