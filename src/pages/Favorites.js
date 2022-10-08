@@ -1,7 +1,7 @@
 import React from 'react';
 import { getFavoriteSongs } from '../services/favoriteSongsAPI';
-import Loading from './Loading';
-import MusicCard from './MusicCard';
+import Loading from '../components/Loading';
+import MusicCard from '../components/MusicCard';
 
 class Favorites extends React.Component {
   constructor() {
@@ -14,6 +14,11 @@ class Favorites extends React.Component {
 
   componentDidMount() {
     this.pegaMusicasFavoritas();
+  }
+
+  componentWillUnmount() {
+    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
+    this.setState = () => {};
   }
 
   colocaLoadingAoSalvarMusica = (e) => {

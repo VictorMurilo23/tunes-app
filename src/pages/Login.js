@@ -1,50 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from './Loading';
+import Loading from '../components/Loading';
 import { createUser } from '../services/userAPI';
 
 class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      nomeUsuario: '',
-      carregando: false,
+      userName: '',
+      loading: false,
     };
   }
 
-  redirecionaESalva = async (e) => {
-    e.preventDefault();
-    this.setState({ carregando: true });
+  saveInfo = async () => {
+    this.setState({ loading: true });
     const { history } = this.props;
-    const { nomeUsuario } = this.state;
-    await createUser({ name: nomeUsuario });
+    const { userName } = this.state;
+    await createUser({ name: userName });
     history.push('/search');
   }
 
   render() {
-    const { nomeUsuario, carregando } = this.state;
-    const lengthMinimo = 3;
-    if (carregando) return <Loading />;
+    const { userName, loading } = this.state;
+    const minLength = 3;
+    if (loading) return <Loading />;
     return (
-      <div data-testid="page-login">
-        <form>
-          <input
-            type="text"
-            data-testid="login-name-input"
-            placeholder="nome"
-            onChange={ (e) => {
-              this.setState({ nomeUsuario: e.target.value });
-            } }
-          />
-          <button
-            type="submit"
-            disabled={ lengthMinimo > nomeUsuario.length }
-            onClick={ this.redirecionaESalva }
-            data-testid="login-submit-button"
-          >
-            Entrar
-          </button>
-        </form>
+      <div className="loginContainer">
+        <div data-testid="page-login" className="loginBox">
+          <div className="loginForm">
+            <input
+              type="text"
+              data-testid="login-name-input"
+              className="loginInput"
+              placeholder="nome"
+              onChange={ (e) => {
+                this.setState({ userName: e.target.value });
+              } }
+            />
+            <button
+              type="button"
+              className="loginInput"
+              disabled={ minLength > userName.length }
+              onClick={ this.saveInfo }
+              data-testid="login-submit-button"
+            >
+              Entrar
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -52,10 +55,6 @@ class Login extends React.Component {
 
 Login.propTypes = {
   history: PropTypes.oneOfType([PropTypes.object]), // https://stackoverflow.com/questions/47551211/reactjs-validating-proptypes <-- me ajudou a validar o history
-};
-
-Login.defaultProps = {
-  history: {},
-};
+}.isRequired;
 
 export default Login;

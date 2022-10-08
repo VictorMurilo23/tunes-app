@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
-import MusicCard from './MusicCard';
-import Loading from './Loading';
+import MusicCard from '../components/MusicCard';
+import Loading from '../components/Loading';
 import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
@@ -26,7 +26,6 @@ class Album extends React.Component {
   }
 
   componentWillUnmount() {
-    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
     this.setState = () => {};
   }
 

@@ -1,98 +1,73 @@
 import React from 'react';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
-import Loading from './Loading';
-import ExibirMusicas from './ExibirMusicas';
+import Loading from '../components/Loading';
+import SearchResults from '../components/SearchResults';
 
 class Search extends React.Component {
   constructor() {
     super();
     this.state = {
-      valorInput: '',
-      carregando: false,
-      buscaFeita: '',
-      arrayDeMusicas: [],
+      searchInputValue: '',
+      loading: false,
+      search: '',
+      albumsArray: [],
     };
   }
 
-  pesquisar = async (e) => {
-    this.setState({ carregando: true });
-    e.preventDefault();
-    const { valorInput } = this.state;
-    const albumMusicas = await searchAlbumsAPI(valorInput);
-    this.setState({
-      carregando: false,
-      buscaFeita: valorInput,
-      arrayDeMusicas: albumMusicas,
-      valorInput: '' });
+  componentWillUnmount() {
+    this.setState = () => {};
   }
 
-  resultadosPesquisa = () => {
-    const { buscaFeita, arrayDeMusicas } = this.state;
-    if (arrayDeMusicas.length === 0) {
-      return (
-        <p>
-          Nenhum álbum foi encontrado
-        </p>);
-    }
-    return (
-      <main>
-        <p>
-          Resultado de álbuns de:
-          {' '}
-          {buscaFeita}
-        </p>
-        {arrayDeMusicas.map((musica) => {
-          const { collectionId,
-            artistName,
-            collectionName,
-            artworkUrl100 } = musica;
-          return (
-            <div key={ collectionId }>
-              <ExibirMusicas
-                nomeArtista={ artistName }
-                musica={ collectionName }
-                imagemAlbum={ artworkUrl100 }
-                collectionId={ collectionId }
-              />
-            </div>);
-        })}
-      </main>
-    );
+  searchAlbum = async () => {
+    this.setState({ loading: true });
+    const { searchInputValue } = this.state;
+    const albums = await searchAlbumsAPI(searchInputValue);
+    this.setState({
+      loading: false,
+      search: searchInputValue,
+      albumsArray: albums,
+      searchInputValue: '' });
   }
 
   render() {
     const {
-      valorInput, carregando, buscaFeita,
+      searchInputValue, loading, search,
+      albumsArray,
     } = this.state;
 
-    const lengthMinimo = 2;
+    const minLength = 2;
 
-    if (carregando) {
+    if (loading) {
       return (<Loading />);
     }
     return (
-      <div data-testid="page-search">
-        <form>
+      <div data-testid="page-search" className="pageSearch">
+        <div className="searchInputsContainer">
           <input
-            value={ valorInput }
+            value={ searchInputValue }
             onChange={ (e) => {
-              this.setState({ valorInput: e.target.value });
+              this.setState({ searchInputValue: e.target.value });
             } }
             type="text"
+            className="inputSearch"
             placeholder="Nome do artista"
             data-testid="search-artist-input"
           />
           <button
             type="submit"
-            disabled={ lengthMinimo > valorInput.length }
-            onClick={ this.pesquisar }
+            className="searchBtn"
+            disabled={ minLength > searchInputValue.length }
+            onClick={ this.searchAlbum }
             data-testid="search-artist-button"
           >
             Pesquisar
           </button>
-        </form>
+        </div>
         {
-          buscaFeita !== '' ? this.resultadosPesquisa() : null
+          search !== '' && <SearchResults
+            musicsArray={ albumsArray }
+            searchName={ search }
+          />
         }
       </div>
     );

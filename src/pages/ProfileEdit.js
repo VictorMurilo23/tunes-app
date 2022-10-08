@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from './Loading';
+import Loading from '../components/Loading';
 import { getUser, updateUser } from '../services/userAPI';
 
 class ProfileEdit extends React.Component {
@@ -18,6 +18,11 @@ class ProfileEdit extends React.Component {
 
   async componentDidMount() {
     await this.pegaInformacoesDoUsuario();
+  }
+
+  componentWillUnmount() {
+    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
+    this.setState = () => {};
   }
 
   handleChange = ({ target }) => {
