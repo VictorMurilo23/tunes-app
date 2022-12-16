@@ -6,6 +6,9 @@ Nessa aplicação é possível pesquisar por artistas, ouvir músicas de álbuns
 
 Não tem muito segredo de como usar, é só pesquisar e ouvir músicas.
 
+## Link da aplicação
+https://tunes-app.vercel.app/
+
 ## Imagem da aplicação em uso
 
 ![Tunes App](images/tunes-app.png)
