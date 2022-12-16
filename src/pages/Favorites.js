@@ -44,22 +44,24 @@ class Favorites extends React.Component {
       return <Loading />;
     }
     return (
-      <div data-testid="page-favorites">
-        <h1>Favoritos</h1>
-        {
-          musicasFavoritas.map((musica) => (
-            <MusicCard
-              key={ Number(musica.trackId) }
-              value
-              putLoading={ this.putLoading }
-              removeLoading={ this.removeLoading }
-              musicObj={ musica }
-              previewUrl={ musica.previewUrl }
-              trackName={ musica.trackName }
-              trackId={ Number(musica.trackId) }
-            />
-          ))
-        }
+      <div data-testid="page-favorites" className="musicsPage">
+        <h1 className="favoritesH1">Favoritos</h1>
+        <div className="albumMusicsContainer">
+          {
+            musicasFavoritas.map((musica) => (
+              <MusicCard
+                key={ Number(musica.trackId) }
+                value
+                putLoading={ this.putLoading }
+                removeLoading={ this.removeLoading }
+                musicObj={ musica }
+                previewUrl={ musica.previewUrl }
+                trackName={ musica.trackName }
+                trackId={ Number(musica.trackId) }
+              />
+            ))
+          }
+        </div>
       </div>
     );
   }

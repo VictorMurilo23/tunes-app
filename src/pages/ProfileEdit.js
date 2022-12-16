@@ -7,7 +7,7 @@ class ProfileEdit extends React.Component {
   constructor() {
     super();
     this.state = {
-      carregando: true,
+      loading: true,
       nomeUsuario: '',
       emailUsuario: '',
       descricaoUsuario: '',
@@ -32,11 +32,11 @@ class ProfileEdit extends React.Component {
     this.setState({
       [name]: value,
     }, () => {
-      this.verificarInformacoes();
+      this.verifyFormInfo();
     });
   }
 
-  atualizarInformacoes = async () => {
+  updateUserInfo = async () => {
     const {
       nomeUsuario,
       emailUsuario,
@@ -54,7 +54,7 @@ class ProfileEdit extends React.Component {
     history.push('/profile');
   }
 
-  verificarInformacoes = () => {
+  verifyFormInfo = () => {
     const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; // Achei aqui => https://www.simplilearn.com/tutorials/javascript-tutorial/email-validation-in-javascript
     const { nomeUsuario, emailUsuario, descricaoUsuario, fotoUsuario } = this.state;
     if (nomeUsuario.length > 0
@@ -74,27 +74,28 @@ class ProfileEdit extends React.Component {
       emailUsuario: objetoInformacoes.email,
       descricaoUsuario: objetoInformacoes.description,
       fotoUsuario: objetoInformacoes.image,
-      carregando: false });
+      loading: false });
   }
 
   render() {
-    const { carregando,
+    const { loading,
       nomeUsuario,
       emailUsuario,
       descricaoUsuario,
       fotoUsuario,
       botaoDesativado } = this.state;
-    if (carregando) {
+    if (loading) {
       return <Loading />;
     }
     return (
       <div data-testid="page-profile-edit">
-        <h1>Edit</h1>
-        <form>
+        <h1 className="formEditH1">Edit</h1>
+        <form className="editProfileContainer">
           <label htmlFor="nomeUsuario">
-            Nome:
+            Nome
             <input
               value={ nomeUsuario }
+              className="editInput"
               name="nomeUsuario"
               type="text"
               id="nomeUsuario"
@@ -103,8 +104,9 @@ class ProfileEdit extends React.Component {
             />
           </label>
           <label htmlFor="emailUsuario">
-            Email:
+            Email
             <input
+              className="editInput"
               value={ emailUsuario }
               name="emailUsuario"
               type="text"
@@ -114,9 +116,10 @@ class ProfileEdit extends React.Component {
             />
           </label>
           <label htmlFor="descricaoUsuario">
-            Descrição:
+            Descrição
             <input
               value={ descricaoUsuario }
+              className="editInput"
               name="descricaoUsuario"
               type="text"
               id="descricaoUsuario"
@@ -125,9 +128,10 @@ class ProfileEdit extends React.Component {
             />
           </label>
           <label htmlFor="fotoUsuario">
-            Foto:
+            Foto
             <input
               value={ fotoUsuario }
+              className="editInput"
               name="fotoUsuario"
               type="text"
               id="fotoUsuario"
@@ -139,7 +143,8 @@ class ProfileEdit extends React.Component {
           <button
             type="button"
             disabled={ botaoDesativado }
-            onClick={ this.atualizarInformacoes }
+            onClick={ this.updateUserInfo }
+            className="saveProfileInfoBtn"
             data-testid="edit-button-save"
           >
             Editar perfil
@@ -152,10 +157,6 @@ class ProfileEdit extends React.Component {
 
 ProfileEdit.propTypes = {
   history: PropTypes.oneOfType([PropTypes.object]), // https://stackoverflow.com/questions/47551211/reactjs-validating-proptypes <-- me ajudou a validar o history
-};
-
-ProfileEdit.defaultProps = {
-  history: {},
-};
+}.isRequired;
 
 export default ProfileEdit;

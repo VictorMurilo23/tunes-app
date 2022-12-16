@@ -7,47 +7,49 @@ class Profile extends React.Component {
   constructor() {
     super();
     this.state = {
-      carregando: true,
-      informacoesUsuario: {},
+      loading: true,
+      userInfo: {},
     };
   }
 
   componentDidMount() {
-    this.pegaInformacoesDoUsuario();
+    this.getUserInfo();
   }
 
-  componentWillUnmount() {
-    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
-    this.setState = () => {};
-  }
+  // componentWillUnmount() {
+  //   // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
+  //   this.setState = () => {};
+  // }
 
-  pegaInformacoesDoUsuario = async () => {
+  getUserInfo = async () => {
     const objetoInformacoes = await getUser();
-    this.setState({ informacoesUsuario: objetoInformacoes, carregando: false });
+    this.setState({ userInfo: objetoInformacoes, loading: false });
   }
 
   render() {
-    const { carregando, informacoesUsuario } = this.state;
-    const { image, name, email, description } = informacoesUsuario;
+    const { loading, userInfo } = this.state;
+    const { image, name, email, description } = userInfo;
 
-    if (carregando) {
+    if (loading) {
       return <Loading />;
     }
     return (
-      <div data-testid="page-profile">
+      <div data-testid="page-profile" className="userProfileContainer">
         <img src={ image } alt="Foto usuario" data-testid="profile-image" />
-        <h2>Nome</h2>
-        <p>
-          {name}
-        </p>
-        <h2>email</h2>
-        <p>
-          {email}
-        </p>
-        <h2>Descrição</h2>
-        <p>
-          {description}
-        </p>
+        <div className="userInfoContainer">
+          <h2>Nome</h2>
+          <p>
+            {name}
+          </p>
+          <h2>email</h2>
+          <p>
+            {email}
+          </p>
+          <h2>Descrição</h2>
+          <p>
+            {description}
+          </p>
+        </div>
         <Link to="/profile/edit">Editar perfil</Link>
       </div>
     );

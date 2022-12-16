@@ -58,7 +58,7 @@ class Album extends React.Component {
       return <Loading />;
     }
     return (
-      <div data-testid="page-album" className="albumPage">
+      <div data-testid="page-album" className="musicsPage">
         <h1 className="albumH1">Album</h1>
         {
           didItGetAllMusics
