@@ -26,14 +26,15 @@ code {
 
 .loginContainer {
   height: 100vh;
+  background-color: black;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .loginBox {
-  background-color: white;
-  border: 1px solid black;
+  background-color: rgb(37, 36, 36);
+  border: 1px solid white;
   box-shadow: 2px 2px 4px 0px #0000003d;;
   border-radius: 15px;
   display: flex;
@@ -71,7 +72,7 @@ code {
 }
 
 .link {
-  background-color: aqua;
+  background-color: rgb(15, 14, 14);
   width: 33.4%;
   align-items: center;
   height: 3.5em;
@@ -80,7 +81,8 @@ code {
 }
 
 .link a {
-  text-decoration: none;
+  text-decoration: underline;
+  color: white;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -167,3 +169,69 @@ code {
 .searchArtistName {
   font-size: 1rem;
 }
+
+.albumDetailsInfoContainer {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  display: flex;
+  background-color: black;
+  padding-left: 3px;
+  gap: 8px;
+  color: white;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+.albumDetailsInfoContainer img {
+  border: 2px solid white;
+}
+
+.artistAndAlbumNameContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.albumPage {
+  background-color: rgb(15, 14, 14);
+  color: white;
+}
+
+.albumPage .albumH1 {
+  display: none ;
+}
+
+.albumMusicsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-top: 5px;
+}
+
+.musicCard {
+  word-break: break-all;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 5px;
+}
+
+.musicCard label {
+  gap: 5px;
+  /* padding: 5px; */
+  display: flex;
+  /* background-color: red; */
+}
+
+.musicCard label input {
+  size: 5px;
+  background-color: red;
+}
+

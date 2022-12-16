@@ -9,85 +9,92 @@ class Album extends React.Component {
   constructor() {
     super();
     this.state = {
-      arrayDeMusicas: [],
-      pegouTudo: false,
-      carregando: false,
-      musicasFavoritas: [],
+      musicsArray: [],
+      didItGetAllMusics: false,
+      loading: false,
+      favoriteMusics: [],
     };
   }
 
   componentDidMount() {
-    this.pegaMusicas();
-    this.pegaFavoritos();
+    this.getMusics();
+    this.getFavorites();
   }
 
   componentDidUpdate() {
-    this.pegaFavoritos();
+    this.getFavorites();
   }
 
   componentWillUnmount() {
     this.setState = () => {};
   }
 
-  pegaMusicas = async () => {
+  getMusics = async () => {
     const { match } = this.props;
     const { id } = match.params;
     const musicas = await getMusics(id);
     this.setState({
-      arrayDeMusicas: musicas,
-      pegouTudo: true,
+      musicsArray: musicas,
+      didItGetAllMusics: true,
     });
   }
 
-  pegaFavoritos = async () => {
-    const favoritas = await getFavoriteSongs();
-    this.setState({ musicasFavoritas: favoritas });
+  getFavorites = async () => {
+    const favoriteMusics = await getFavoriteSongs();
+    this.setState({ favoriteMusics });
   }
 
-  colocaLoadingAoSalvarMusica = (e) => {
-    this.setState({ carregando: true, [e.target.name]: e.target.checked });
+  putLoadingOnSave = (e) => {
+    this.setState({ loading: true, [e.target.name]: e.target.checked });
   }
 
-  tiraLoadingAoTerminarDeSalvarMusica = () => {
-    this.setState({ carregando: false });
+  removeLoading = () => {
+    this.setState({ loading: false });
   }
 
   render() {
-    const { arrayDeMusicas, pegouTudo, carregando, musicasFavoritas } = this.state;
-    if (pegouTudo === false || carregando) {
+    const { musicsArray, didItGetAllMusics, loading, favoriteMusics } = this.state;
+    if (didItGetAllMusics === false || loading) {
       return <Loading />;
     }
     return (
-      <div data-testid="page-album">
-        <h1>Album</h1>
+      <div data-testid="page-album" className="albumPage">
+        <h1 className="albumH1">Album</h1>
         {
-          pegouTudo
+          didItGetAllMusics
             ? (
-              <>
-                <h1 data-testid="album-name">{arrayDeMusicas[0].collectionName}</h1>
-                <h2 data-testid="artist-name">{arrayDeMusicas[0].artistName}</h2>
-              </>)
+              <div className="albumDetailsInfoContainer">
+                <img
+                  src={ musicsArray[0].artworkUrl100 }
+                  alt={ `Imagem do album ${musicsArray[0].collectionName}` }
+                />
+                <div className="artistAndAlbumNameContainer">
+                  <h1 data-testid="album-name">{musicsArray[0].collectionName}</h1>
+                  <h2 data-testid="artist-name">{musicsArray[0].artistName}</h2>
+                </div>
+              </div>)
             : null
         }
-        {
-          arrayDeMusicas.slice(1).map((musica) => {
-            const verificaSeTem = musicasFavoritas
-              .some((nome) => nome.trackName === musica.trackName);
-            const { [musica.trackName]: valor } = this.state;
-            return (
-              <div key={ musica.trackId }>
+        <div className="albumMusicsContainer">
+          {
+            musicsArray.slice(1).map((musica) => {
+              const verifyFavorites = favoriteMusics
+                .some((nome) => nome.trackName === musica.trackName);
+              return (
                 <MusicCard
-                  value={ verificaSeTem ? true : valor }
-                  colocaLoading={ this.colocaLoadingAoSalvarMusica }
-                  tiraLoading={ this.tiraLoadingAoTerminarDeSalvarMusica }
-                  objetoInteiro={ musica }
+                  key={ musica.trackId }
+                  value={ !!verifyFavorites }
+                  putLoading={ this.putLoadingOnSave }
+                  removeLoading={ this.removeLoading }
+                  musicObj={ musica }
                   previewUrl={ musica.previewUrl }
                   trackName={ musica.trackName }
                   trackId={ musica.trackId }
                 />
-              </div>);
-          })
-        }
+              );
+            })
+          }
+        </div>
       </div>
     );
   }

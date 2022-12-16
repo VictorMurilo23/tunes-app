@@ -16,19 +16,19 @@ class Favorites extends React.Component {
     this.pegaMusicasFavoritas();
   }
 
-  componentWillUnmount() {
-    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
-    this.setState = () => {};
-  }
+  // componentWillUnmount() {
+  //   // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component <-- me ajudou a resolver o problema de memory leak que estava acontecendo.
+  //   this.setState = () => {};
+  // }
 
-  colocaLoadingAoSalvarMusica = (e) => {
+  putLoading = (e) => {
     const { musicasFavoritas } = this.state;
     const tirarMusicaDoArray = musicasFavoritas
       .filter((element) => element.trackName !== e.target.name);
     this.setState({ carregando: true, musicasFavoritas: tirarMusicaDoArray });
   }
 
-  tiraLoadingAoTerminarDeSalvarMusica = () => {
+  removeLoading = () => {
     this.setState({ carregando: false });
   }
 
@@ -48,17 +48,17 @@ class Favorites extends React.Component {
         <h1>Favoritos</h1>
         {
           musicasFavoritas.map((musica) => (
-            <div key={ Number(musica.trackId) }>
-              <MusicCard
-                value
-                colocaLoading={ this.colocaLoadingAoSalvarMusica }
-                tiraLoading={ this.tiraLoadingAoTerminarDeSalvarMusica }
-                objetoInteiro={ musica }
-                previewUrl={ musica.previewUrl }
-                trackName={ musica.trackName }
-                trackId={ Number(musica.trackId) }
-              />
-            </div>))
+            <MusicCard
+              key={ Number(musica.trackId) }
+              value
+              putLoading={ this.putLoading }
+              removeLoading={ this.removeLoading }
+              musicObj={ musica }
+              previewUrl={ musica.previewUrl }
+              trackName={ musica.trackName }
+              trackId={ Number(musica.trackId) }
+            />
+          ))
         }
       </div>
     );
